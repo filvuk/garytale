@@ -137,21 +137,27 @@ def plot_uvvis(
 
     # NOTE: make some default selection for nicer plotting
     if to_plot is None:
-        default_selection = [0, 2, 4]
+        selected_idxs = [0, 2, 4]
         if len(graphs) <= 100:
-            default_selection += [i for i in range(9, len(graphs), 15)]
+            selected_idxs += [i for i in range(9, len(graphs), 15)]
         else:
-            default_selection += [i for i in range(9, 99, 15)] + [
+            selected_idxs += [i for i in range(9, 99, 15)] + [
                 i for i in range(99, len(graphs), 50)
             ]
-        selected = [graphs[i] for i in default_selection]
+        selected_scans = [graphs[i] for i in selected_idxs]
+        _log.debug(f"Selection is {selected_idxs}")
+        if _log.getEffectiveLevel() == logging.DEBUG:
+            _log.debug(f"Respective start times of selection: {[start_times[i] for i in selected_idxs]}")
     else:
-        selected = [graphs[i] for i in to_plot]
+        selected_scans = [graphs[i] for i in to_plot]
+        selected_idxs = to_plot
+    # NOTE: build 2-tuple of selected scans and respective selected start times
+    selected = (selected_scans, [start_times[i] for i in selected_idxs])
+    _log.debug(f"First 10 selected start times: {selected[1][:10]}")
 
     # NOTE: plot first element to get ax object
-    sel = selected[0]
-    ax = sel.plot(x=0, y=1, label=f"{start_times[0] * 60:.0f} s", **lambda_plot_opts)
-    for graph, time in zip(selected[1:], start_times[1:]):
+    ax = selected[0][0].plot(x=0, y=1, label=f"{selected[1][0] * 60:.0f} s", **lambda_plot_opts)
+    for graph, time in zip(selected[0][1:], selected[1][1:]):
         graph.plot(x=0, y=1, ax=ax, label=f"{time * 60:.0f} s", **lambda_plot_opts)
     plt.xlabel(r"$\lambda$ (nm)", labelpad=2.0)
     plt.ylabel(y_label, labelpad=2.0)
