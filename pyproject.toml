@@ -1,6 +1,6 @@
 [project]
 name = "garytale"
-version = "0.1.1"
+version = "0.1.2"
 description = "Library for working with Aglient Cary 60 kinetics scan measurements with simultaneous irradiation, as seen in the working group under Prof. Wöll (IPC RWTH Aachen)."
 license = "MIT"
 authors = [
