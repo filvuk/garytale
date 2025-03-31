@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{include = "qyds_uv", from = "src"}]
+packages = [{include = "garytale", from = "src"}]
 
 
 [build-system]
